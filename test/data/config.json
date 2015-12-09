@@ -1,0 +1,29 @@
+{
+    "storage": {
+        "input": {
+            "tables": [
+                {
+                    "source": "in.c-bucket.comments",
+                    "destination": "comments.csv"
+                }
+            ]
+        },
+        "output": {
+            "tables": [
+                {
+                    "source": "result.csv",
+                    "destination": "in.c-bucket.short_comments"
+                }
+            ]
+        }
+    },
+    "parameters": {
+        "max": 75,
+        "min": 50,
+        "idPrefix": "",
+        "columns": {
+            "id": "id",
+            "text": "data"
+        }
+    }
+}
