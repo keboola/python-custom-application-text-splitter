@@ -37,14 +37,11 @@ Example
 
 ### Input data
 
-"id"|"data"
------------
-"1"|"Thank you for the amazing service! I'll sure be coming back."
------------
-"2"|"Hello, are there any actual plans to open a branch of your company anywhere closer to Kamloops? 
-Most of the time it is a pleasure using your services(except for an odd case here and there), however the commute pushes the expenses way above the usual value, not to mention the countless hours spent on the way to you."
------------
-"3"|"Hello, can you actually clarify how does the price matching work with foreign online stores? You claim you can match 'everyone', does that actually include i.e. european stores?"
+|"id"|"data"|
+|---|---|
+|"1"|"Thank you for the amazing service! I'll sure be coming back."|
+|"2"|"Hello, are there any actual plans to open a branch of your company anywhere closer to Kamloops? Most of the time it is a pleasure using your services(except for an odd case here and there), however the commute pushes the expenses way above the usual value, not to mention the countless hours spent on the way to you."|
+|"3"|"Hello, can you actually clarify how does the price matching work with foreign online stores? You claim you can match 'everyone', does that actually include i.e. european stores?"|
 
 
 ### Configuration
@@ -64,20 +61,13 @@ Most of the time it is a pleasure using your services(except for an odd case her
 ### Output data
 
 "pk"|"id"|"row"|"text"
-----------
+---|---|---|---
 "1_0"|"1"|"0"|"Thank you for the amazing service! I'll sure be coming back."
-----------
 "2_0"|"2"|"0"|"Hello, are there any actual plans to open a branch of your company anywhere"
-----------
 "2_1"|"2"|"1"|" closer to Kamloops? Most of the time it is a pleasure using your"
 "2_2"|"2"|"2"|" services(except for an odd case here and there), however the commute"
-----------
 "2_3"|"2"|"3"|" pushes the expenses way above the usual value, not to mention the"
-----------
 "2_4"|"2"|"4"|" countless hours spent on the way to you."
-----------
 "3_0"|"3"|"0"|"Hello, can you actually clarify how does the price matching work with"
-----------
 "3_1"|"3"|"1"|" foreign online stores? You claim you can match 'everyone', does that"
-----------
 "3_2"|"3"|"2"|" actually include i.e. european stores?"
