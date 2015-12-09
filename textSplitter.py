@@ -1,8 +1,6 @@
 # coding=utf-8
 from keboola import docker
-import os
 import csv
-import itertools
 
 class App:
     def run(self):

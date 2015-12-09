@@ -4,6 +4,7 @@ import csv
 
 class TestTextSplitter:
     def test_textSplitter(self, dataDir):
+        dataDir = os.getenv('KBC_DATA_DIR')        
         app = textSplitter.App()
         app.run()
         
