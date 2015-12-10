@@ -9,7 +9,8 @@ install:
   - "pip install git+git://github.com/keboola/python-docker-application.git"
 
 script: 
-  - "py.test --dataDir=./test/data --cov=keboola --cov-report term-missing"
+  - "export KBC_DATA_DIR=./test/data"
+  - "py.test --cov=keboola --cov-report term-missing"
 
 notifications: 
   slack: "keboola:fym2t4112jahUATYBYFS3oBS"
