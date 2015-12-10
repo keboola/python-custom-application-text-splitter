@@ -43,7 +43,6 @@ Example
 |"2"|"Hello, are there any actual plans to open a branch of your company anywhere closer to Kamloops? Most of the time it is a pleasure using your services(except for an odd case here and there), however the commute pushes the expenses way above the usual value, not to mention the countless hours spent on the way to you."|
 |"3"|"Hello, can you actually clarify how does the price matching work with foreign online stores? You claim you can match 'everyone', does that actually include i.e. european stores?"|
 
-
 ### Configuration
 
 ```
@@ -57,6 +56,9 @@ Example
     }
 }
 ```
+
+For configuration in KBC, use [Custom Science Python Application](https://sites.google.com/a/keboola.com/wiki/home/keboola-connection/devel-space/integrating-with-kbc/custom-applications/custom-r-science-applications)
+![Configuration screenshot](https://github.com/keboola/python-custom-application-text-splitter/blob/master/doc/screenshot.png)
 
 ### Output data
 
