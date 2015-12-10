@@ -4,8 +4,9 @@ import csv
 
 class App:
     def run(self):
+        # initialize KBC configuration 
         cfg = docker.Config()
-        # validate parameters
+        # validate application parameters
         parameters = cfg.getParameters()
         textMax = parameters.get('max')
         textMin = parameters.get('min')
@@ -16,7 +17,7 @@ class App:
         idPrefix = parameters.get('idPrefix', '')
         incremental = parameters.get('incremental', 0)
 
-        # get input and utput table
+        # get input and output table and validate them
         tables = cfg.getInputTables()
         if (len(tables) != 1):
             raise ValueError("Input mapping must contain one table only.")
@@ -25,17 +26,21 @@ class App:
         if (len(tables) != 1):
             raise ValueError("Output mapping must contain one table only.")
         outTable = tables[0]
+        # physical location of the source file with source data
         inFilePath = inTable['full_path']
+        # physical location of the target file with output data
         outfilePath = outTable['full_path']
-        
+
+        # validate columns in the input table        
         with open(inFilePath, 'rt') as inFile:
+            # handle null character
             lazyLines = map(lambda line: line.replace('\0', ''), inFile)
             csvReader = csv.DictReader(lazyLines, delimiter = ',', quotechar = '"')
             row = next(csvReader)
-            print(row)            
             if ((idColumn not in row) or (textColumn not in row)):
                 raise ValueError("The source table does not contain columns " + idColumn + ", " + textColumn)
 
+        # read the input table and immediatelly write to the output table
         with open(inFilePath, 'rt') as inFile, open(outfilePath, 'wt') as outFile:
             writer = csv.DictWriter(outFile, fieldnames = ['pk', 'id', 'row', 'text'], lineterminator='\n', delimiter = ',', quotechar = '"')
             writer.writeheader()
@@ -43,6 +48,7 @@ class App:
             lazyLines = map(lambda line: line.replace('\0', ''), inFile)
             csvReader = csv.DictReader(lazyLines, delimiter = ',', quotechar = '"')
             for row in csvReader:
+                # do the text splitting
                 fragmentIndex = 0
                 stringToSplit = row[textColumn]
                 while (len(stringToSplit) > textMax):
@@ -52,16 +58,17 @@ class App:
                         offset = textMin
                     fragment = stringToSplit[:offset]
                     stringToSplit = stringToSplit[offset:]
+                    # write output row
                     outRow = {
                         'pk': idPrefix + str(row[idColumn]) + '_' + str(fragmentIndex),
                         'id': row[idColumn],
                         'row': fragmentIndex,
                         'text': fragment
                     }
-                    fragmentIndex += 1
                     writer.writerow(outRow)
+                    fragmentIndex += 1
                 if len(stringToSplit) > 0:
-                    print(stringToSplit)
+                    # write output row
                     outRow = {
                         'pk': idPrefix + str(row[idColumn]) + '_' + str(fragmentIndex),
                         'id': row[idColumn],
