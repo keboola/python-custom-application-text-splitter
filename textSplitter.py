@@ -1,5 +1,6 @@
 from keboola import docker
 import csv
+import io
 
 class App:
     def run(self):
@@ -31,7 +32,7 @@ class App:
         outfilePath = outTable['full_path']
 
         # validate columns in the input table        
-        with open(inFilePath, mode='rt', encoding='utf-8') as inFile:
+        with io.open(inFilePath, mode='rt', encoding='utf-8') as inFile:
             # handle null character
             lazyLines = map(lambda line: line.replace('\0', ''), inFile)
             csvReader = csv.DictReader(lazyLines, dialect='kbc')
@@ -40,7 +41,7 @@ class App:
                 raise ValueError("The source table does not contain columns " + idColumn + ", " + textColumn)
 
         # read the input table and immediatelly write to the output table
-        with open(inFilePath, mode='rt', encoding='utf-8') as inFile, open(outfilePath, mode='wt', encoding='utf-8') as outFile:
+        with io.open(inFilePath, mode='rt', encoding='utf-8') as inFile, io.open(outfilePath, mode='wt', encoding='utf-8') as outFile:
             writer = csv.DictWriter(outFile, fieldnames = ['pk', 'id', 'row', 'text'], dialect='kbc')
             writer.writeheader()
 
