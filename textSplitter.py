@@ -1,4 +1,3 @@
-# coding=utf-8
 from keboola import docker
 import csv
 
@@ -32,21 +31,21 @@ class App:
         outfilePath = outTable['full_path']
 
         # validate columns in the input table        
-        with open(inFilePath, 'rt') as inFile:
+        with open(inFilePath, mode='rt', encoding='utf-8') as inFile:
             # handle null character
             lazyLines = map(lambda line: line.replace('\0', ''), inFile)
-            csvReader = csv.DictReader(lazyLines, delimiter = ',', quotechar = '"')
+            csvReader = csv.DictReader(lazyLines, dialect='kbc')
             row = next(csvReader)
             if ((idColumn not in row) or (textColumn not in row)):
                 raise ValueError("The source table does not contain columns " + idColumn + ", " + textColumn)
 
         # read the input table and immediatelly write to the output table
-        with open(inFilePath, 'rt') as inFile, open(outfilePath, 'wt') as outFile:
-            writer = csv.DictWriter(outFile, fieldnames = ['pk', 'id', 'row', 'text'], lineterminator='\n', delimiter = ',', quotechar = '"')
+        with open(inFilePath, mode='rt', encoding='utf-8') as inFile, open(outfilePath, mode='wt', encoding='utf-8') as outFile:
+            writer = csv.DictWriter(outFile, fieldnames = ['pk', 'id', 'row', 'text'], dialect='kbc')
             writer.writeheader()
 
             lazyLines = map(lambda line: line.replace('\0', ''), inFile)
-            csvReader = csv.DictReader(lazyLines, delimiter = ',', quotechar = '"')
+            csvReader = csv.DictReader(lazyLines, dialect='kbc')
             for row in csvReader:
                 # do the text splitting
                 fragmentIndex = 0
