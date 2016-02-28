@@ -1,5 +1,6 @@
-from keboola import docker
 import csv
+from keboola import docker
+
 
 class App:
     def run(self):
@@ -9,20 +10,20 @@ class App:
         parameters = cfg.getParameters()
         textMax = parameters.get('max')
         textMin = parameters.get('min')
-        idColumn = parameters.get('columns').get('id')
-        textColumn = parameters.get('columns').get('text')
-        if (textMin == None or textMin == None or idColumn == None or textColumn == None):
+        idColumn = parameters.get('columns', {}).get('id')
+        textColumn = parameters.get('columns', {}).get('text')
+        if textMin is None or textMin is None or idColumn is None or textColumn is None:
             raise ValueError("max, min, columns.id and columns.text are required parameters.")
         idPrefix = parameters.get('idPrefix', '')
         incremental = parameters.get('incremental', 0)
 
         # get input and output table and validate them
         tables = cfg.getInputTables()
-        if (len(tables) != 1):
+        if len(tables) != 1:
             raise ValueError("Input mapping must contain one table only.")
         inTable = tables[0]
         tables = cfg.getExpectedOutputTables()
-        if (len(tables) != 1):
+        if len(tables) != 1:
             raise ValueError("Output mapping must contain one table only.")
         outTable = tables[0]
         # physical location of the source file with source data
@@ -33,27 +34,27 @@ class App:
         # validate columns in the input table        
         with open(inFilePath, mode='rt', encoding='utf-8') as inFile:
             # handle null character
-            lazyLines = map(lambda line: line.replace('\0', ''), inFile)
+            lazyLines = (line.replace('\0', '') for line in inFile)
             csvReader = csv.DictReader(lazyLines, dialect='kbc')
             row = next(csvReader)
-            if ((idColumn not in row) or (textColumn not in row)):
-                raise ValueError("The source table does not contain columns " + idColumn + ", " + textColumn)
+            if idColumn not in row or textColumn not in row:
+                raise ValueError("The source table does not contain columns {}, {}".format(idColumn, textColumn))
 
         # read the input table and immediatelly write to the output table
         with open(inFilePath, mode='rt', encoding='utf-8') as inFile, open(outfilePath, mode='wt', encoding='utf-8') as outFile:
-            writer = csv.DictWriter(outFile, fieldnames = ['pk', 'id', 'row', 'text'], dialect='kbc')
+            writer = csv.DictWriter(outFile, fieldnames=['pk', 'id', 'row', 'text'], dialect='kbc')
             writer.writeheader()
 
-            lazyLines = map(lambda line: line.replace('\0', ''), inFile)
+            lazyLines = (line.replace('\0', '') for line in inFile)
             csvReader = csv.DictReader(lazyLines, dialect='kbc')
             for row in csvReader:
                 # do the text splitting
                 fragmentIndex = 0
                 stringToSplit = row[textColumn]
-                while (len(stringToSplit) > textMax):
-                    fragment = stringToSplit[:textMax+1]
+                while len(stringToSplit) > textMax:
+                    fragment = stringToSplit[:textMax + 1]
                     offset = fragment.rfind(' ')
-                    if (offset < textMin):
+                    if offset < textMin:
                         offset = textMin
                     fragment = stringToSplit[:offset]
                     stringToSplit = stringToSplit[offset:]
