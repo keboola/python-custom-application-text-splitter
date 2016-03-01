@@ -4,7 +4,7 @@ from keboola import docker
 
 class App:
     def run(self):
-        # initialize KBC configuration 
+        # initialize KBC configuration
         cfg = docker.Config()
         # validate application parameters
         parameters = cfg.getParameters()
@@ -31,7 +31,7 @@ class App:
         # physical location of the target file with output data
         outfilePath = outTable['full_path']
 
-        # validate columns in the input table        
+        # validate columns in the input table
         with open(inFilePath, mode='rt', encoding='utf-8') as inFile:
             # handle null character
             lazyLines = (line.replace('\0', '') for line in inFile)
