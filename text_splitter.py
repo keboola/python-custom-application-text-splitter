@@ -7,7 +7,7 @@ class App:
         # initialize KBC configuration
         cfg = docker.Config()
         # validate application parameters
-        parameters = cfg.getParameters()
+        parameters = cfg.get_parameters()
         text_max = parameters.get('max')
         text_min = parameters.get('min')
         id_dolumn = parameters.get('columns', {}).get('id')
@@ -17,11 +17,11 @@ class App:
         id_prefix = parameters.get('id_prefix', '')
 
         # get input and output table and validate them
-        tables = cfg.getInputTables()
+        tables = cfg.get_input_tables()
         if len(tables) != 1:
             raise ValueError("Input mapping must contain one table only.")
         in_table = tables[0]
-        tables = cfg.getExpectedOutputTables()
+        tables = cfg.get_expected_output_tables()
         if len(tables) != 1:
             raise ValueError("Output mapping must contain one table only.")
         out_table = tables[0]
