@@ -1,15 +1,14 @@
-language: python
-
-python: 
-  - "3.5"
-
-install: 
-  - "pip install pytest-cov"
-  - "pip install git+git://github.com/keboola/python-docker-application.git"
-
-script: 
-  - "export KBC_DATA_DIR=./test/data"
-  - "py.test --cov=keboola --cov-report term-missing"
-
-notifications: 
-  slack: "keboola:fym2t4112jahUATYBYFS3oBS"
+sudo: required
+language: bash
+services:
+  - docker
+before_script:
+  - docker build . --tag=my-component
+after_success:
+  - docker images
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./deploy.sh
+  on:
+    tags: true
