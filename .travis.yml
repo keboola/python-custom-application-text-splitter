@@ -4,6 +4,7 @@ services:
   - docker
 before_script:
   - docker build . --tag=my-component
+  - docker run -e KBC_DATA_DIR=/code/test/data my-component pytest -q /code/test/ --cov=keboola --cov-report term-missing
 after_success:
   - docker images
 deploy:
