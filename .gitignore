@@ -1,3 +1,2 @@
-/.coverage
-__pycache__
-/.cache
+/vendor
+/data
